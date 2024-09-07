@@ -433,7 +433,7 @@ defmodule Instructor do
          changeset <- cast_all(model, params),
          {:validation, %Ecto.Changeset{valid?: true} = changeset, _response} <-
            {:validation, call_validate(response_model, changeset, validation_context), response} do
-      {:ok, changeset |> Ecto.Changeset.apply_changes()}
+      {:ok, changeset |> Ecto.Changeset.apply_changes(), response["usage"]["prompt_tokens"], response["usage"]["completion_tokens"]}
     else
       {:llm, {:error, error}} ->
         {:error, "LLM Adapter Error: #{inspect(error)}"}
