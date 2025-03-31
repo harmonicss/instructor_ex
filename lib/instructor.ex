@@ -435,7 +435,9 @@ defmodule Instructor do
            {cast_all(model, params), raw_response},
          {%Ecto.Changeset{valid?: true} = changeset, _raw_response} <-
            {call_validate(response_model, changeset, validation_context), raw_response} do
-      {:ok, changeset |> Ecto.Changeset.apply_changes()}
+             {:ok, changeset |> Ecto.Changeset.apply_changes(),
+              raw_response |> Map.get(:body) |> Map.get("usage", %{}) |> Map.get("prompt_tokens", 0), 
+              raw_response |> Map.get(:body) |> Map.get("usage", %{}) |> Map.get("completion_tokens", 0)}
     else
       {%Ecto.Changeset{} = changeset, raw_response} ->
         if max_retries > 0 do
